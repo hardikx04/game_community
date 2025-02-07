@@ -1,5 +1,6 @@
 import * as React from "react";
-import { extendTheme, styled } from "@mui/material/styles";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { extendTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -9,7 +10,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-import Grid from "@mui/material/Grid2";
+// import Grid from "@mui/material/Grid2";
 
 const NAVIGATION = [
   {
@@ -81,12 +82,12 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
-const Skeleton = styled("div")(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
+// const Skeleton = styled("div")(({ theme, height }) => ({
+//   backgroundColor: theme.palette.action.hover,
+//   borderRadius: theme.shape.borderRadius,
+//   height,
+//   content: '" "',
+// }));
 
 export default function DashboardLayoutBasic() {
   const [session, setSession] = React.useState({
@@ -129,41 +130,13 @@ export default function DashboardLayoutBasic() {
     >
       <DashboardLayout>
         <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
-
-            <Grid size={12}>
-              <Skeleton height={150} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-          </Grid>
+          {/* <Grid container spacing={1}>
+            {[...Array(18)].map((_, index) => (
+              <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Skeleton height={250} />
+              </Grid>
+            ))}
+          </Grid> */}
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
