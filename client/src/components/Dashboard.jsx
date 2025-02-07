@@ -10,6 +10,13 @@ import ChatIcon from "@mui/icons-material/Chat";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
+import DashboardPage from "./DashboardPage";
+import RecruitPlayersPage from "./RecruitPlayersPage";
+import MySquadPage from "./MySquadPage";
+import LocalEventsPage from "./LocalEventsPage";
+import ChatRoomsPage from "./ChatRoomsPage";
+import TeamChatPage from "./TeamChatPage";
+import GameChatPage from "./GameChatPage";
 // import Grid from "@mui/material/Grid2";
 
 const NAVIGATION = [
@@ -29,24 +36,34 @@ const NAVIGATION = [
     icon: <EmojiEventsIcon />,
   },
   {
-    segment: "chat",
-    title: "Chat Rooms",
+    segment: "team-chat",
+    title: "Team Chat",
     icon: <ChatIcon />,
-    children: [
-      {
-        segment: "team-chat",
-        title: "Team Chat",
-        icon: <GroupsIcon />,
-        fullPath: "/chat/team-chat",
-      },
-      {
-        segment: "game-chat",
-        title: "Game chat",
-        icon: <SportsEsportsIcon />,
-        fullPath: "/chat/game-chat",
-      },
-    ],
   },
+  {
+    segment: "game-chat",
+    title: "Game Chat",
+    icon: <SportsEsportsIcon />,
+  },
+  // {
+  //   segment: "chat",
+  //   title: "Chat Rooms",
+  //   icon: <ChatIcon />,
+  //   children: [
+  //     {
+  //       segment: "team-chat",
+  //       title: "Team Chat",
+  //       icon: <GroupsIcon />,
+  //       fullPath: "/chat/team-chat",
+  //     },
+  //     {
+  //       segment: "game-chat",
+  //       title: "Game chat",
+  //       icon: <SportsEsportsIcon />,
+  //       fullPath: "/chat/game-chat",
+  //     },
+  //   ],
+  // },
   {
     segment: "squad",
     title: "My Squad",
@@ -68,14 +85,17 @@ const demoTheme = extendTheme({
   },
 });
 
-function useDemoRouter(initialPath) {
-  const [pathname, setPathname] = React.useState(initialPath);
+function useRouter() {
+  const [pathname, setPathname] = React.useState(window.location.pathname);
 
   const router = React.useMemo(() => {
     return {
       pathname,
       searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
+      navigate: (path) => {
+        window.history.pushState({}, "", path);
+        setPathname(String(path));
+      },
     };
   }, [pathname]);
 
@@ -115,9 +135,31 @@ export default function DashboardLayoutBasic() {
     };
   }, []);
 
-  const router = useDemoRouter("/dashboard");
+  const router = useRouter();
 
   //   const demoWindow = window ? window() : undefined;
+
+  const renderPage = () => {
+    switch (router.pathname) {
+      case "/dashboard":
+        return <DashboardPage />;
+      case "/recruit":
+        return <RecruitPlayersPage />;
+      case "/events":
+        return <LocalEventsPage />;
+      case "/chat":
+        return <ChatRoomsPage />;
+      case "/squad":
+        return <MySquadPage />;
+      case "/team-chat":
+        return <TeamChatPage />;
+      case "/game-chat":
+        return <GameChatPage />;
+      default:
+        router.navigate("/dashboard");
+        return <DashboardPage />;
+    }
+  };
 
   return (
     <AppProvider
@@ -137,6 +179,7 @@ export default function DashboardLayoutBasic() {
               </Grid>
             ))}
           </Grid> */}
+          {renderPage()}
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
