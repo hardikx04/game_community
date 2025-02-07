@@ -45,25 +45,6 @@ const NAVIGATION = [
     title: "Game Chat",
     icon: <SportsEsportsIcon />,
   },
-  // {
-  //   segment: "chat",
-  //   title: "Chat Rooms",
-  //   icon: <ChatIcon />,
-  //   children: [
-  //     {
-  //       segment: "team-chat",
-  //       title: "Team Chat",
-  //       icon: <GroupsIcon />,
-  //       fullPath: "/chat/team-chat",
-  //     },
-  //     {
-  //       segment: "game-chat",
-  //       title: "Game chat",
-  //       icon: <SportsEsportsIcon />,
-  //       fullPath: "/chat/game-chat",
-  //     },
-  //   ],
-  // },
   {
     segment: "squad",
     title: "My Squad",
@@ -136,8 +117,6 @@ export default function DashboardLayoutBasic() {
   }, []);
 
   const router = useRouter();
-
-  //   const demoWindow = window ? window() : undefined;
 
   const renderPage = () => {
     switch (router.pathname) {
