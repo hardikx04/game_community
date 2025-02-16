@@ -1,14 +1,18 @@
 import * as React from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { extendTheme } from "@mui/material/styles";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import ChatIcon from "@mui/icons-material/Chat";
 import { AppProvider } from "@toolpad/core/AppProvider";
-import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import { DashboardLayout, ThemeSwitcher } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import DashboardPage from "./DashboardPage";
 import RecruitPlayersPage from "./RecruitPlayersPage";
@@ -17,6 +21,7 @@ import LocalEventsPage from "./LocalEventsPage";
 import ChatRoomsPage from "./ChatRoomsPage";
 import TeamChatPage from "./TeamChatPage";
 import GameChatPage from "./GameChatPage";
+// import SearchBar from "./SearchBar";
 // import Grid from "@mui/material/Grid2";
 
 const NAVIGATION = [
@@ -83,12 +88,42 @@ function useRouter() {
   return router;
 }
 
-// const Skeleton = styled("div")(({ theme, height }) => ({
-//   backgroundColor: theme.palette.action.hover,
-//   borderRadius: theme.shape.borderRadius,
-//   height,
-//   content: '" "',
-// }));
+function ToolbarActionsSearch() {
+  return (
+    <Stack direction="row">
+      <Tooltip title="Search" enterDelay={1000}>
+        <div>
+          <IconButton
+            type="button"
+            aria-label="search"
+            sx={{
+              display: { xs: "inline", md: "none" },
+            }}
+          >
+            <SearchIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      <TextField
+        label="Search"
+        variant="outlined"
+        size="small"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <IconButton type="button" aria-label="search" size="small">
+                <SearchIcon />
+              </IconButton>
+            ),
+            sx: { pr: 0.5 },
+          },
+        }}
+        sx={{ display: { xs: "none", md: "inline-block" }, mr: 1 }}
+      />
+      <ThemeSwitcher />
+    </Stack>
+  );
+}
 
 export default function DashboardLayoutBasic() {
   const [session, setSession] = React.useState({
@@ -149,17 +184,13 @@ export default function DashboardLayoutBasic() {
       theme={demoTheme}
       branding={{ logo: "", title: "GuildHub" }}
     >
-      <DashboardLayout>
-        <PageContainer>
-          {/* <Grid container spacing={1}>
-            {[...Array(18)].map((_, index) => (
-              <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }}>
-                <Skeleton height={250} />
-              </Grid>
-            ))}
-          </Grid> */}
-          {renderPage()}
-        </PageContainer>
+      <DashboardLayout
+        slots={{
+          toolbarActions: ToolbarActionsSearch,
+        }}
+        disableCollapsibleSidebar={true}
+      >
+        <PageContainer>{renderPage()}</PageContainer>
       </DashboardLayout>
     </AppProvider>
   );
