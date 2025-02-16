@@ -20,7 +20,7 @@ export default function RecruitPlayersPage() {
     <Grid container spacing={3}>
       {cardData.map((card, index) => (
         <Grid item xs={12} sm={6} md={4} key={index}>
-          <Card sx={{ maxWidth: 280 }}>
+          <Card sx={{ maxWidth: 280, borderRadius: "10px" }}>
             <CardActionArea>
               <CardMedia
                 component="img"
@@ -40,8 +40,19 @@ export default function RecruitPlayersPage() {
                 </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions sx={{ paddingTop: "4px" }}>
-              <Button size="small" color="primary">
+            <CardActions
+              sx={{
+                paddingTop: "4px",
+                paddingBottom: "10px",
+                paddingLeft: "14px",
+              }}
+            >
+              <Button
+                size="small"
+                color="primary"
+                variant="contained"
+                sx={{ borderRadius: "5px" }}
+              >
                 Invite
               </Button>
             </CardActions>
