@@ -13,6 +13,9 @@ import {
   Avatar,
   Divider,
   Badge,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
@@ -66,32 +69,92 @@ const OnlineBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const TeamChatPage = () => {
+  const [currentTeam, setCurrentTeam] = useState(1);
+  const [teams] = useState([
+    { id: 1, name: "Team 1" },
+    { id: 2, name: "Team 2" },
+    { id: 3, name: "Team 3" },
+  ]);
+
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([
-    // Initial messages for demonstration
-    {
-      id: 1,
-      text: "Hello team!",
-      sender: "John Doe",
-      timestamp: "10:00 AM",
-    },
-    {
-      id: 2,
-      text: "Hi John! How's the project going?",
-      sender: "You",
-      timestamp: "10:01 AM",
-    },
-  ]);
-  const [onlineUsers, setOnlineUsers] = useState([
-    { id: 1, name: "John Doe", avatar: "/path/to/avatar1.jpg", online: true },
-    { id: 2, name: "Jane Smith", avatar: "/path/to/avatar2.jpg", online: true },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      avatar: "/path/to/avatar3.jpg",
-      online: false,
-    },
-  ]);
+  const [messages, setMessages] = useState({
+    1: [
+      {
+        id: 1,
+        text: "Hello Engineering team!",
+        sender: "John Doe",
+        timestamp: "10:00 AM",
+      },
+      {
+        id: 2,
+        text: "Hi John! How's the project going?",
+        sender: "You",
+        timestamp: "10:01 AM",
+      },
+    ],
+    2: [
+      {
+        id: 1,
+        text: "Hello Marketing team!",
+        sender: "Jane Smith",
+        timestamp: "09:00 AM",
+      },
+    ],
+    3: [
+      {
+        id: 1,
+        text: "Hello Design team!",
+        sender: "Mike Johnson",
+        timestamp: "11:00 AM",
+      },
+    ],
+  });
+
+  const [onlineUsers] = useState({
+    1: [
+      { id: 1, name: "John Doe", avatar: "/path/to/avatar1.jpg", online: true },
+      {
+        id: 2,
+        name: "Jane Smith",
+        avatar: "/path/to/avatar2.jpg",
+        online: true,
+      },
+      {
+        id: 3,
+        name: "Mike Johnson",
+        avatar: "/path/to/avatar3.jpg",
+        online: false,
+      },
+    ],
+    2: [
+      {
+        id: 4,
+        name: "Sarah Wilson",
+        avatar: "/path/to/avatar4.jpg",
+        online: true,
+      },
+      {
+        id: 5,
+        name: "Tom Brown",
+        avatar: "/path/to/avatar5.jpg",
+        online: false,
+      },
+    ],
+    3: [
+      {
+        id: 6,
+        name: "Emily Davis",
+        avatar: "/path/to/avatar6.jpg",
+        online: true,
+      },
+      {
+        id: 7,
+        name: "Alex Turner",
+        avatar: "/path/to/avatar7.jpg",
+        online: true,
+      },
+    ],
+  });
 
   const messageEndRef = useRef(null);
 
@@ -104,30 +167,8 @@ const TeamChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Simulate user status changes
-  useEffect(() => {
-    const statusInterval = setInterval(() => {
-      setOnlineUsers((currentUsers) =>
-        currentUsers.map((user) => ({
-          ...user,
-          online:
-            user.id === Math.floor(Math.random() * 3) + 1
-              ? !user.online
-              : user.online,
-        }))
-      );
-    }, 5000);
-
-    return () => clearInterval(statusInterval);
-  }, []);
-
-  // Handle user status updates
-  const handleUserStatusUpdate = (userId, isOnline) => {
-    setOnlineUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === userId ? { ...user, online: isOnline } : user
-      )
-    );
+  const handleTeamChange = (event) => {
+    setCurrentTeam(event.target.value);
   };
 
   // Handle sending new messages
@@ -143,7 +184,10 @@ const TeamChatPage = () => {
           minute: "2-digit",
         }),
       };
-      setMessages([...messages, newMessage]);
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        [currentTeam]: [...(prevMessages[currentTeam] || []), newMessage],
+      }));
       setMessage("");
     }
   };
@@ -155,12 +199,29 @@ const TeamChatPage = () => {
         <Paper
           sx={{ height: "calc(100vh - 100px)", margin: 1, overflow: "auto" }}
         >
+          {/* Team Selector */}
+          <Box sx={{ p: 2 }}>
+            <FormControl fullWidth size="small">
+              <Select
+                value={currentTeam}
+                onChange={handleTeamChange}
+                sx={{ mb: 2 }}
+              >
+                {teams.map((team) => (
+                  <MenuItem key={team.id} value={team.id}>
+                    {team.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <Divider />
           <Typography variant="h6" sx={{ p: 2 }}>
             Online Users
           </Typography>
           <Divider />
           <List>
-            {onlineUsers.map((user) => (
+            {onlineUsers[currentTeam]?.map((user) => (
               <ListItem key={user.id}>
                 <ListItemAvatar>
                   <OnlineBadge
@@ -185,8 +246,15 @@ const TeamChatPage = () => {
       {/* Chat Area */}
       <Grid item xs={9}>
         <ChatContainer>
+          {/* Team Name Header */}
+          <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
+            <Typography variant="h6">
+              {teams.find((team) => team.id === currentTeam)?.name}
+            </Typography>
+          </Box>
+
           <MessageArea>
-            {messages.map((msg) => (
+            {messages[currentTeam]?.map((msg) => (
               <Box
                 key={msg.id}
                 sx={{
