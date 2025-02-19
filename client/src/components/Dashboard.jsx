@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GroupsIcon from "@mui/icons-material/Groups";
-import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+// import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import ChatIcon from "@mui/icons-material/Chat";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout, ThemeSwitcher } from "@toolpad/core/DashboardLayout";
@@ -20,7 +20,7 @@ import MySquadPage from "./MySquadPage";
 import LocalEventsPage from "./LocalEventsPage";
 import ChatRoomsPage from "./ChatRoomsPage";
 import TeamChatPage from "./TeamChatPage";
-import GameChatPage from "./GameChatPage";
+// import GameChatPage from "./GameChatPage";
 // import SearchBar from "./SearchBar";
 // import Grid from "@mui/material/Grid2";
 
@@ -41,14 +41,9 @@ const NAVIGATION = [
     icon: <EmojiEventsIcon />,
   },
   {
-    segment: "team-chat",
-    title: "Team Chat",
+    segment: "chat",
+    title: "Chat",
     icon: <ChatIcon />,
-  },
-  {
-    segment: "game-chat",
-    title: "Game Chat",
-    icon: <SportsEsportsIcon />,
   },
   {
     segment: "squad",
@@ -161,14 +156,10 @@ export default function DashboardLayoutBasic() {
         return <RecruitPlayersPage />;
       case "/events":
         return <LocalEventsPage />;
-      case "/chat":
-        return <ChatRoomsPage />;
       case "/squad":
         return <MySquadPage />;
-      case "/team-chat":
+      case "/chat":
         return <TeamChatPage />;
-      case "/game-chat":
-        return <GameChatPage />;
       default:
         router.navigate("/dashboard");
         return <DashboardPage />;

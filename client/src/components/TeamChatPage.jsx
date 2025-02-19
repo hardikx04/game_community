@@ -81,7 +81,7 @@ const TeamChatPage = () => {
     1: [
       {
         id: 1,
-        text: "Hello Engineering team!",
+        text: "Hello 1st team!",
         sender: "John Doe",
         timestamp: "10:00 AM",
       },
@@ -95,7 +95,7 @@ const TeamChatPage = () => {
     2: [
       {
         id: 1,
-        text: "Hello Marketing team!",
+        text: "Hello 2nd team!",
         sender: "Jane Smith",
         timestamp: "09:00 AM",
       },
@@ -103,7 +103,7 @@ const TeamChatPage = () => {
     3: [
       {
         id: 1,
-        text: "Hello Design team!",
+        text: "Hello 3rd team!",
         sender: "Mike Johnson",
         timestamp: "11:00 AM",
       },
