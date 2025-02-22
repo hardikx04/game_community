@@ -18,7 +18,6 @@ import DashboardPage from "./DashboardPage";
 import RecruitPlayersPage from "./RecruitPlayersPage";
 import MySquadPage from "./MySquadPage";
 import LocalEventsPage from "./LocalEventsPage";
-import ChatRoomsPage from "./ChatRoomsPage";
 import TeamChatPage from "./TeamChatPage";
 // import GameChatPage from "./GameChatPage";
 // import SearchBar from "./SearchBar";
@@ -186,4 +185,3 @@ export default function DashboardLayoutBasic() {
     </AppProvider>
   );
 }
-
