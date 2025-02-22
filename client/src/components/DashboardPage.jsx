@@ -1,4 +1,6 @@
 import { Line, Bar, Pie } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
+import { Paper, Box, Typography, Grid } from "@mui/material";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,84 +27,16 @@ ChartJS.register(
 );
 
 export default function DashboardPage() {
-  const styles = {
-    dashboardContainer: {
-      padding: "24px 32px",
-      backgroundColor: "#f8fafc",
-      height: "100vh",
-      width: "100%",
-      overflow: "hidden",
-    },
-    chartGrid: {
-      display: "grid",
-      gap: "24px",
-      height: "100%",
-      gridTemplateColumns: "repeat(2, 1fr)",
-      gridTemplateRows: "repeat(2, 1fr)",
-    },
-    chartSection: {
-      background: "white",
-      padding: "24px",
-      borderRadius: "12px",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
-      transition: "transform 0.2s ease",
-      border: "1px solid #e5e7eb",
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",
-      overflow: "hidden",
-    },
-    sectionTitle: {
-      marginBottom: "16px",
-      color: "#1f2937",
-      fontSize: "1rem",
-      fontWeight: "500",
-      flexShrink: 0,
-    },
-    chart: {
-      flex: 1,
-      minHeight: 0,
-      position: "relative",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  };
+  const theme = useTheme();
 
-  const darkModeStyles = {
-    dashboardContainer: {
-      ...styles.dashboardContainer,
-      backgroundColor: "#111827",
-    },
-    chartSection: {
-      ...styles.chartSection,
-      background: "#1f2937",
-      border: "1px solid #374151",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.2)",
-    },
-    sectionTitle: {
-      ...styles.sectionTitle,
-      color: "#e5e7eb",
-    },
-    chart: {
-      ...styles.chart,
-    },
-  };
-
-  const isDarkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const activeStyles = isDarkMode ? darkModeStyles : styles;
-
-  // Single color scheme that works well in both modes
+  // Chart colors using theme palette
   const chartColors = {
-    primary: "#3b82f6", // Blue
-    secondary: "#8b5cf6", // Purple
-    success: "#10b981", // Green
-    warning: "#f59e0b", // Amber
-    error: "#ef4444", // Red
-    neutral: "#64748b", // Slate
+    primary: theme.palette.primary.main,
+    secondary: theme.palette.secondary.main,
+    success: theme.palette.success.main,
+    warning: theme.palette.warning.main,
+    error: theme.palette.error.main,
+    neutral: theme.palette.grey[500],
   };
 
   const chartOptions = {
@@ -114,7 +48,7 @@ export default function DashboardPage() {
         labels: {
           boxWidth: 10,
           padding: 8,
-          color: isDarkMode ? "#e5e7eb" : "#4b5563",
+          color: theme.palette.text.primary,
           font: {
             size: 11,
           },
@@ -130,7 +64,7 @@ export default function DashboardPage() {
           display: false,
         },
         ticks: {
-          color: isDarkMode ? "#9ca3af" : "#6b7280",
+          color: theme.palette.text.secondary,
           font: {
             size: 11,
           },
@@ -138,10 +72,10 @@ export default function DashboardPage() {
       },
       y: {
         grid: {
-          color: isDarkMode ? "#374151" : "#f0f0f0",
+          color: theme.palette.divider,
         },
         ticks: {
-          color: isDarkMode ? "#9ca3af" : "#6b7280",
+          color: theme.palette.text.secondary,
           font: {
             size: 11,
           },
@@ -212,64 +146,112 @@ export default function DashboardPage() {
   };
 
   return (
-    <div style={activeStyles.dashboardContainer}>
-      <div style={styles.chartGrid}>
-        <div style={activeStyles.chartSection}>
-          <h3 style={activeStyles.sectionTitle}>Performance Trend</h3>
-          <div style={activeStyles.chart}>
-            <Line
-              data={performanceData}
-              options={{
-                ...chartOptions,
-                maintainAspectRatio: false,
-              }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
+    <Box
+      sx={{
+        p: 3,
+        bgcolor: theme.palette.background.default,
+        height: "100vh",
+        width: "100%",
+        overflow: "hidden",
+      }}
+    >
+      <Grid container spacing={3} sx={{ height: "100%" }}>
+        <Grid item xs={6} sx={{ height: "50%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 2,
+            }}
+            elevation={1}
+          >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Performance Trend
+            </Typography>
+            <Box sx={{ flex: 1, minHeight: 0 }}>
+              <Line
+                data={performanceData}
+                options={chartOptions}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Box>
+          </Paper>
+        </Grid>
 
-        <div style={activeStyles.chartSection}>
-          <h3 style={activeStyles.sectionTitle}>KDA Breakdown</h3>
-          <div style={activeStyles.chart}>
-            <Bar
-              data={kdaData}
-              options={{
-                ...chartOptions,
-                maintainAspectRatio: false,
-              }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
+        <Grid item xs={6} sx={{ height: "50%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 2,
+            }}
+            elevation={1}
+          >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              KDA Breakdown
+            </Typography>
+            <Box sx={{ flex: 1, minHeight: 0 }}>
+              <Bar
+                data={kdaData}
+                options={chartOptions}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Box>
+          </Paper>
+        </Grid>
 
-        <div style={activeStyles.chartSection}>
-          <h3 style={activeStyles.sectionTitle}>Team KDA Comparison</h3>
-          <div style={activeStyles.chart}>
-            <Bar
-              data={playerKDAData}
-              options={{
-                ...chartOptions,
-                maintainAspectRatio: false,
-              }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
+        <Grid item xs={6} sx={{ height: "50%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 2,
+            }}
+            elevation={1}
+          >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Team KDA Comparison
+            </Typography>
+            <Box sx={{ flex: 1, minHeight: 0 }}>
+              <Bar
+                data={playerKDAData}
+                options={chartOptions}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Box>
+          </Paper>
+        </Grid>
 
-        <div style={activeStyles.chartSection}>
-          <h3 style={activeStyles.sectionTitle}>Prize Distribution</h3>
-          <div style={activeStyles.chart}>
-            <Pie
-              data={prizePoolData}
-              options={{
-                ...chartOptions,
-                maintainAspectRatio: false,
-              }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        <Grid item xs={6} sx={{ height: "50%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 2,
+            }}
+            elevation={1}
+          >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Prize Distribution
+            </Typography>
+            <Box sx={{ flex: 1, minHeight: 0 }}>
+              <Pie
+                data={prizePoolData}
+                options={chartOptions}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
