@@ -1,6 +1,17 @@
 import { Line, Bar, Pie } from "react-chartjs-2";
 import { useTheme } from "@mui/material/styles";
-import { Paper, Box, Typography, Grid } from "@mui/material";
+import {
+  Paper,
+  Box,
+  Typography,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -84,6 +95,27 @@ export default function DashboardPage() {
     },
   };
 
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          boxWidth: 10,
+          padding: 8,
+          color: theme.palette.text.primary,
+          font: {
+            size: 11,
+          },
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+  };
+
   const performanceData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
     datasets: [
@@ -145,18 +177,35 @@ export default function DashboardPage() {
     ],
   };
 
+  const leaderboardData = [
+    { rank: 1, name: "Team Alpha", points: 2500, winRate: "75%" },
+    { rank: 2, name: "Team Beta", points: 2350, winRate: "70%" },
+    { rank: 3, name: "Team Gamma", points: 2200, winRate: "65%" },
+    { rank: 4, name: "Team Delta", points: 2100, winRate: "62%" },
+    { rank: 5, name: "Team Epsilon", points: 2000, winRate: "60%" },
+    { rank: 6, name: "Team Zeta", points: 1950, winRate: "58%" },
+    { rank: 7, name: "Team Eta", points: 1900, winRate: "57%" },
+    { rank: 8, name: "Team Theta", points: 1850, winRate: "55%" },
+    { rank: 9, name: "Team Iota", points: 1800, winRate: "54%" },
+    { rank: 10, name: "Team Kappa", points: 1750, winRate: "53%" },
+    { rank: 11, name: "Team Lambda", points: 1700, winRate: "52%" },
+    { rank: 12, name: "Team Mu", points: 1650, winRate: "51%" },
+    { rank: 13, name: "Team Nu", points: 1600, winRate: "50%" },
+    { rank: 14, name: "Team Xi", points: 1550, winRate: "49%" },
+    { rank: 15, name: "Team Omicron", points: 1500, winRate: "48%" },
+  ];
+
   return (
     <Box
       sx={{
         p: 3,
         bgcolor: theme.palette.background.default,
-        height: "100vh",
+        minHeight: "100vh",
         width: "100%",
-        overflow: "hidden",
       }}
     >
-      <Grid container spacing={3} sx={{ height: "100%" }}>
-        <Grid item xs={6} sx={{ height: "50%" }}>
+      <Grid container spacing={3}>
+        <Grid item xs={6} sx={{ height: "400px" }}>
           <Paper
             sx={{
               p: 3,
@@ -180,7 +229,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={6} sx={{ height: "50%" }}>
+        <Grid item xs={6} sx={{ height: "400px" }}>
           <Paper
             sx={{
               p: 3,
@@ -204,7 +253,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={6} sx={{ height: "50%" }}>
+        <Grid item xs={6} sx={{ height: "400px" }}>
           <Paper
             sx={{
               p: 3,
@@ -228,7 +277,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={6} sx={{ height: "50%" }}>
+        <Grid item xs={6} sx={{ height: "400px" }}>
           <Paper
             sx={{
               p: 3,
@@ -245,10 +294,49 @@ export default function DashboardPage() {
             <Box sx={{ flex: 1, minHeight: 0 }}>
               <Pie
                 data={prizePoolData}
-                options={chartOptions}
+                options={pieOptions}
                 style={{ width: "100%", height: "100%" }}
               />
             </Box>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sx={{ height: "400px" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 2,
+            }}
+            elevation={1}
+          >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Tournament Leaderboard
+            </Typography>
+            <TableContainer sx={{ flex: 1 }}>
+              <Table size="small" stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Rank</TableCell>
+                    <TableCell>Team Name</TableCell>
+                    <TableCell align="right">Points</TableCell>
+                    <TableCell align="right">Win Rate</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {leaderboardData.map((row) => (
+                    <TableRow key={row.rank}>
+                      <TableCell>{row.rank}</TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell align="right">{row.points}</TableCell>
+                      <TableCell align="right">{row.winRate}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Paper>
         </Grid>
       </Grid>

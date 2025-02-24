@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GroupsIcon from "@mui/icons-material/Groups";
-// import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import ChatIcon from "@mui/icons-material/Chat";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout, ThemeSwitcher } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
@@ -19,9 +19,11 @@ import RecruitPlayersPage from "./RecruitPlayersPage";
 import MySquadPage from "./MySquadPage";
 import LocalEventsPage from "./LocalEventsPage";
 import TeamChatPage from "./TeamChatPage";
-// import GameChatPage from "./GameChatPage";
-// import SearchBar from "./SearchBar";
-// import Grid from "@mui/material/Grid2";
+import Card from "@mui/material/Card";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
 
 const NAVIGATION = [
   {
@@ -64,6 +66,91 @@ const demoTheme = extendTheme({
     },
   },
 });
+
+function SidebarFooter({ session, authentication }) {
+  if (!session?.user) {
+    return null;
+  }
+
+  return (
+    <Card
+      sx={{
+        width: "100%",
+        bgcolor: "background.paper",
+        boxShadow: "none",
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 0,
+        "&:hover": {
+          boxShadow: 1,
+          transition: "box-shadow 0.3s ease-in-out",
+        },
+      }}
+    >
+      <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 2 }}>
+        <Avatar
+          src={session.user.image}
+          alt={session.user.name}
+          sx={{
+            width: 40,
+            height: 40,
+            border: "2px solid",
+            borderColor: "primary.main",
+          }}
+        />
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+          <Typography variant="body1" fontWeight="500" sx={{ lineHeight: 1.2 }}>
+            {session.user.name}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{
+              display: "block",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {session.user.email}
+          </Typography>
+        </Box>
+        <IconButton
+          size="small"
+          onClick={authentication.signOut}
+          sx={{
+            color: "text.secondary",
+            "&:hover": {
+              color: "error.main",
+            },
+          }}
+        >
+          <LogoutIcon fontSize="small" />
+        </IconButton>
+      </Stack>
+    </Card>
+  );
+}
+
+// ✅ **PropTypes Validation**
+SidebarFooter.propTypes = {
+  session: PropTypes.shape({
+    user: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    }),
+  }),
+  authentication: PropTypes.shape({
+    signIn: PropTypes.func.isRequired,
+    signOut: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+// Default Props (optional, to prevent errors if session is undefined)
+SidebarFooter.defaultProps = {
+  session: null,
+};
 
 function useRouter() {
   const [pathname, setPathname] = React.useState(window.location.pathname);
@@ -128,7 +215,7 @@ export default function DashboardLayoutBasic() {
     },
   });
 
-  const authentication = React.useMemo(() => {
+  const appAuthentication = React.useMemo(() => {
     return {
       signIn: () => {
         setSession({
@@ -139,9 +226,7 @@ export default function DashboardLayoutBasic() {
           },
         });
       },
-      signOut: () => {
-        setSession(null);
-      },
+      signOut: () => setSession(null),
     };
   }, []);
 
@@ -168,7 +253,7 @@ export default function DashboardLayoutBasic() {
   return (
     <AppProvider
       session={session}
-      authentication={authentication}
+      authentication={appAuthentication}
       navigation={NAVIGATION}
       router={router}
       theme={demoTheme}
@@ -177,6 +262,25 @@ export default function DashboardLayoutBasic() {
       <DashboardLayout
         slots={{
           toolbarActions: ToolbarActionsSearch,
+          sidebarFooter: () => (
+            <SidebarFooter
+              session={session}
+              authentication={{ signOut: () => setSession(null) }}
+            />
+          ),
+        }}
+        slotProps={{
+          toolbarAccount: {
+            slotProps: {
+              popover: {
+                open: false,
+                sx: { display: "none" },
+              },
+              signOutButton: {
+                sx: { display: "none" },
+              },
+            },
+          },
         }}
         disableCollapsibleSidebar={true}
       >
