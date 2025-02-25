@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 export default function RecruitPlayersPage() {
   const cardData = Array.from({ length: 18 }, (_, index) => ({
@@ -14,13 +15,48 @@ export default function RecruitPlayersPage() {
     image:
       "https://img.freepik.com/free-vector/polygonal-face-with-headphones_23-2147507024.jpg?ga=GA1.1.1175049919.1736341576&semt=ais_hybrid",
     alt: "green iguana",
+    isOnline: Math.random() < 0.5, // Randomly set online status for demo
   }));
 
   return (
     <Grid container spacing={3}>
       {cardData.map((card, index) => (
         <Grid item xs={12} sm={6} md={4} key={index}>
-          <Card sx={{ maxWidth: 280, borderRadius: "10px" }}>
+          <Card
+            sx={{ maxWidth: 280, borderRadius: "10px", position: "relative" }}
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: 12,
+                right: 12,
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.6)",
+                borderRadius: "12px",
+                padding: "4px 8px",
+                zIndex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor: card.isOnline ? "#4CAF50" : "#f44336",
+                  marginRight: "6px",
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#fff",
+                  fontWeight: 500,
+                }}
+              >
+                {card.isOnline ? "Online" : "Offline"}
+              </Typography>
+            </Box>
             <CardActionArea>
               <CardMedia
                 component="img"
