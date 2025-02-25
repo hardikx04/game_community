@@ -25,7 +25,7 @@ const squadMembers = [
     rank: "Master",
   },
   {
-    name: "Blaze",
+    name: "FreedomFighter",
     role: "Assault",
     avatar: "https://i.pravatar.cc/150?img=3",
     rank: "Veteran",
