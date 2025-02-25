@@ -24,32 +24,51 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+import GameChatPage from "./GameChatPage";
 const NAVIGATION = [
   {
     segment: "dashboard",
     title: "Dashboard",
     icon: <DashboardIcon />,
+    fullPath: "/dashboard",
   },
   {
     segment: "recruit",
     title: "Recruit Players",
     icon: <PeopleIcon />,
+    fullPath: "/recruit",
   },
   {
     segment: "events",
     title: "Local Events",
     icon: <EmojiEventsIcon />,
+    fullPath: "/events",
   },
   {
     segment: "chat",
     title: "Chat",
     icon: <ChatIcon />,
+    children: [
+      {
+        segment: "team-chat",
+        title: "Team Chat",
+        icon: <GroupsIcon />,
+        fullPath: "/chat/team-chat",
+      },
+      {
+        segment: "game-chat",
+        title: "Game Chat",
+        icon: <SportsEsportsIcon />,
+        fullPath: "/chat/game-chat",
+      },
+    ],
   },
   {
     segment: "squad",
     title: "My Squad",
     icon: <GroupsIcon />,
+    fullPath: "/squad",
   },
 ];
 
@@ -155,52 +174,30 @@ SidebarFooter.defaultProps = {
 function useRouter() {
   const [pathname, setPathname] = React.useState(window.location.pathname);
 
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => {
-        window.history.pushState({}, "", path);
-        setPathname(String(path));
-      },
-    };
-  }, [pathname]);
+  React.useEffect(() => {
+    const handlePopState = () => setPathname(window.location.pathname);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
-  return router;
+  return {
+    pathname,
+    navigate: (path) => {
+      window.history.pushState({}, "", path);
+      setPathname(path);
+    },
+  };
 }
 
 function ToolbarActionsSearch() {
   return (
-    <Stack direction="row">
+    <Stack direction="row" spacing={1}>
+      <TextField label="Search" variant="outlined" size="small" />
       <Tooltip title="Search" enterDelay={1000}>
-        <div>
-          <IconButton
-            type="button"
-            aria-label="search"
-            sx={{
-              display: { xs: "inline", md: "none" },
-            }}
-          >
-            <SearchIcon />
-          </IconButton>
-        </div>
+        <IconButton type="button" aria-label="search">
+          <SearchIcon />
+        </IconButton>
       </Tooltip>
-      <TextField
-        label="Search"
-        variant="outlined"
-        size="small"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <IconButton type="button" aria-label="search" size="small">
-                <SearchIcon />
-              </IconButton>
-            ),
-            sx: { pr: 0.5 },
-          },
-        }}
-        sx={{ display: { xs: "none", md: "inline-block" }, mr: 1 }}
-      />
       <ThemeSwitcher />
     </Stack>
   );
@@ -242,8 +239,10 @@ export default function DashboardLayoutBasic() {
         return <LocalEventsPage />;
       case "/squad":
         return <MySquadPage />;
-      case "/chat":
+      case "/chat/team-chat":
         return <TeamChatPage />;
+      case "/chat/game-chat":
+        return <GameChatPage />;
       default:
         router.navigate("/dashboard");
         return <DashboardPage />;
@@ -265,22 +264,9 @@ export default function DashboardLayoutBasic() {
           sidebarFooter: () => (
             <SidebarFooter
               session={session}
-              authentication={{ signOut: () => setSession(null) }}
+              authentication={appAuthentication}
             />
           ),
-        }}
-        slotProps={{
-          toolbarAccount: {
-            slotProps: {
-              popover: {
-                open: false,
-                sx: { display: "none" },
-              },
-              signOutButton: {
-                sx: { display: "none" },
-              },
-            },
-          },
         }}
         disableCollapsibleSidebar={true}
       >
