@@ -1,5 +1,15 @@
+import {
+  Box,
+  Card,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Avatar,
+  Chip,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const squadMembers = [
   {
@@ -15,7 +25,7 @@ const squadMembers = [
     rank: "Master",
   },
   {
-    name: "Blaze",
+    name: "FreedomFighter",
     role: "Assault",
     avatar: "https://i.pravatar.cc/150?img=3",
     rank: "Veteran",
@@ -30,48 +40,71 @@ const squadMembers = [
 
 export default function MySquadPage() {
   const [motto, setMotto] = useState("Together, We Conquer!");
+  const theme = useTheme();
 
   return (
-    <div
-      className="container py-5 text-white"
-      style={{ backgroundColor: "#121212", minHeight: "100vh" }}
+    <Container
+      sx={{
+        py: 5,
+        minHeight: "100vh",
+        bgcolor: "background.default",
+        color: "text.primary",
+      }}
     >
-      <h2 className="text-center mb-4">⚡ My Squad ⚡</h2>
-      <div className="text-center text-muted mb-4">
+      <Typography variant="h4" textAlign="center" mb={4}>
+        ⚡ My Squad ⚡
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        textAlign="center"
+        mb={4}
+        color="text.secondary"
+        component="div"
+      >
         <em>"{motto}"</em>
-      </div>
+      </Typography>
 
-      <div className="row g-4 justify-content-center">
+      <Grid container spacing={4} justifyContent="center">
         {squadMembers.map((member, index) => (
-          <div key={index} className="col-md-5">
-            <div className="card bg-dark text-white p-3 shadow border border-secondary">
-              <div className="d-flex align-items-center">
-                <img
+          <Grid item key={index} xs={12} md={5}>
+            <Card
+              sx={{
+                p: 3,
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                border: 1,
+                borderColor: "divider",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
                   src={member.avatar}
                   alt={member.name}
-                  className="rounded-circle me-3"
-                  width="60"
-                  height="60"
+                  sx={{ width: 60, height: 60, mr: 2 }}
                 />
-                <div>
-                  <h5 className="mb-1">{member.name}</h5>
-                  <p className="mb-1 text-muted">{member.role}</p>
-                  <span className="badge bg-primary">{member.rank}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+                <Box>
+                  <Typography variant="h6" mb={0.5}>
+                    {member.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mb={0.5}>
+                    {member.role}
+                  </Typography>
+                  <Chip label={member.rank} color="primary" size="small" />
+                </Box>
+              </Box>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      <div className="mt-4 text-center">
-        <button
+      <Box sx={{ mt: 4, textAlign: "center" }}>
+        <Button
+          variant="contained"
           onClick={() => setMotto("Legends Never Die!")}
-          className="btn btn-primary"
         >
           Change Motto
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Container>
   );
 }
