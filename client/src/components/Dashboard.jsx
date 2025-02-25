@@ -268,6 +268,19 @@ export default function DashboardLayoutBasic() {
             />
           ),
         }}
+        slotProps={{
+          toolbarAccount: {
+            slotProps: {
+              popover: {
+                open: false,
+                sx: { display: "none" },
+              },
+              signOutButton: {
+                sx: { display: "none" },
+              },
+            },
+          },
+        }}
         disableCollapsibleSidebar={true}
       >
         <PageContainer>{renderPage()}</PageContainer>
