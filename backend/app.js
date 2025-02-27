@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 // const cors = require('cors');
 
+const userRouter = require("./routes/userRoutes");
+
 const app = express();
 app.enable("trust proxy", 1);
 
@@ -68,6 +70,8 @@ app.use(mongoSanitize());
 
 // Data sanitization against XSS
 app.use(xss());
+app.use("/", viewRouter);
+app.use("/api/v1/users", userRouter);
 app.use(compression());
 
 module.exports = app;
