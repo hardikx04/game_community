@@ -8,7 +8,7 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
-// const cors = require('cors');
+const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
 
@@ -70,7 +70,6 @@ app.use(mongoSanitize());
 
 // Data sanitization against XSS
 app.use(xss());
-app.use("/", viewRouter);
 app.use("/api/v1/users", userRouter);
 app.use(compression());
 
