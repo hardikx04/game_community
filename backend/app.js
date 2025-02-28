@@ -11,6 +11,7 @@ const compression = require("compression");
 const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
+const eventRouter = require("./routes/eventRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -75,6 +76,7 @@ app.use(xss());
 app.use(compression());
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/events", eventRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
